@@ -1,0 +1,88 @@
+Monitor lock is acquired when synchronized  keyword is used on particular method/block
+For each object there will be a one monitor lock.
+
+sleep(Timed waiting state) - do not release monitor lock
+wait, notify, stop(Waiting state, Blocked state)- releases monitor lock
+
+
+Below three are deprecated methods
+stop: thread terminates abruptly and no lock is released (causes deadlock)
+suspend: put the thread on hold. no lock is released(causes deadlock)
+resume: used to resume the thread which is suspended
+
+join: thread will wait until other thread thread finished its job
+Ex: t2.join() defined in main method - main thread will wait till t2 finishes its work
+
+setPriority: Even if priority is set there is not guarentee that thread will start first(never depend on priority)
+1 - low
+5 - default(norm)
+10 - high
+If new thread is created it will have the same priority as parent thread
+Ex: t2.setPriority(3)
+
+deamon: deamon means ASYNC
+deamon thread is alive till anyone of the user threads is alive
+Ex: t1.setDeamon(true);
+main is user thread
+t1 is made as deamon thread.
+if main thread finish its working then t1 gets terminated as well.
+
+Locks:
+1. Generally, synchronized block put a lock on each object.
+2. If there are 2 objects then each object has  lock and both objects can enter at a time into
+synchronized block.
+3. Lock is used when there are many objects and method/block will allow only one object inside.
+
+
+ReentrantLock(pessimistic)
+ReentrantLockReadWrite(pessimistic)
+StampedLock(supports both optimistic/pessimistic)
+Semaphore(pessimistic)
+
+ReentrantLockReadWrite: (SharedLock-Read, ExclusiveLock-Read,Write)
+If Exclusive lock is acquired then no other locks can be acquired
+If t1 is puts shared lock, then t2 can also put a shared lock but t2 can not acquire exclusive lock
+If t1 is puts exclusive lock, then t2 can not put a shared lock and also t2 can not acquire exclusive lock
+
+Optimistic Lock: New row is added called version. If simultaneously both threads try accessing the same row then conflict occurs, then roll back happens.
+1. StampedLock
+
+Pessimistic Lock:
+1. ReentrantLock
+2. ReentrantLockReadWrite
+3. StampedLock
+4. Semaphore - Gives flexibility that how many threads can acquire the lock at same time.
+
+Inter thread communication:
+With locks we use await & signal instead wait & notify
+wait, notify - MonitorLock(synchronized blocks)
+await, signal - For rest other locks
+
+----------------------------------
+Lock Free Mechanism: Only use when we have situation like read, modify, update
+CAS Operation(Compare And Swap) - similar to optimistic lock. basically this happens at CPU level
+CAS operation takes parameters(memory, expectedValue, newValue)
+1. Fetches the value from memory, compares the value with expected value.
+2. If both matches then new value gets updated to memory.
+3. Else again it fetches latest data from memory and compare it with expected value
+AtomicInteger
+AtomicBoolean
+AtomicReference
+
+--------------------------------------
+
+
+ThreadPool:
+It's a collection of threads which are available to perform the assigned tasks.
+Define the number of threads during initialization, if all the threads are occupied with
+some tasks and no thread is available for new incoming task, we store that new task into
+Priority Queue. As soon as any thread completes its job and reach back to thread pool will
+pick up the task in the queue.
+
+Advantages of ThreadPool:
+1. can save the thread creation time
+2. overhead of managing the thread lifecycle is removed
+3. increased performance(more processing and less context switching)
+
+ThreadPoolExecutor: Helps in creating customizable threads
+
